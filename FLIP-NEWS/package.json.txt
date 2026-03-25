@@ -1,0 +1,9 @@
+{
+  "name": "flip-news",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.18.2",
+    "rss-parser": "^3.13.0",
+    "cors": "^2.8.5"
+  }
+}

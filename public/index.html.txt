@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLIP NEWS</title>
+
+<style>
+body { margin:0; font-family:sans-serif; background:#eef6ff; }
+.top { background:#4aa3ff; color:white; padding:20px; text-align:center; }
+.grid { display:grid; gap:15px; padding:20px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); }
+.card { background:white; padding:15px; border-radius:12px; cursor:pointer; }
+.news { display:none; padding:20px; }
+</style>
+</head>
+
+<body>
+
+<div class="top">
+  <h1>FLIP NEWS</h1>
+  <button onclick="forceUpdate()">Обновить новости</button>
+</div>
+
+<div id="grid" class="grid"></div>
+
+<div id="news" class="news">
+  <h2 id="title"></h2>
+  <p id="desc"></p>
+  <a id="link" target="_blank">Оригинал</a><br><br>
+  <button onclick="back()">Назад</button>
+</div>
+
+<script>
+
+let articles = [];
+let current = null;
+
+async function loadNews() {
+  const res = await fetch("/top");
+  articles = await res.json();
+
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  articles.forEach(a=>{
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `<b>${a.title}</b><br>${a.source}`;
+    div.onclick = ()=>openNews(a);
+    grid.appendChild(div);
+  });
+}
+
+function openNews(a){
+  current = a;
+  document.getElementById("grid").style.display="none";
+  document.getElementById("news").style.display="block";
+
+  title.innerText = a.title;
+  desc.innerText = a.description;
+  link.href = a.url;
+}
+
+function back(){
+  document.getElementById("grid").style.display="grid";
+  document.getElementById("news").style.display="none";
+}
+
+async function forceUpdate(){
+  await fetch("/update");
+  loadNews();
+}
+
+loadNews();
+
+</script>
+
+</body>
+</html>
